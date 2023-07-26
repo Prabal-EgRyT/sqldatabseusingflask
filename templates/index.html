@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Welcome to Employee Management System</title>
+  </head>
+  <body bgcolor="#e2d1c3">
+    <h1>Welcome to Employee Management System</h1>
+    <p>Click the links below to navigate to different pages:</p>
+    <ul>
+      <li><a href="{{ url_for('show_departments') }}">Departments</a></li>
+      <li><a href="{{ url_for('list_employees') }}">Employees</a></li>
+      <li><a href="{{ url_for('list_attendance') }}">Attendance</a></li>
+    </ul>
+  </body>
+</html>
