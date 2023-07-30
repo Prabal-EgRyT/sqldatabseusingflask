@@ -64,7 +64,7 @@ def add_department():
         db.session.add(new_department)
         db.session.commit()
         return redirect(url_for("show_departments"))
-    return render_template("add_department.html")
+    return render_template("department.html")
 
 
 @app.route("/edit_department/<int:id>", methods=["GET", "POST"])
@@ -109,7 +109,12 @@ def add_employee():
         db.session.add(new_employee)
         db.session.commit()
         return redirect(url_for("list_employees"))
-    return render_template("add_employee.html")
+
+    # Fetch all departments and pass them to the template
+    departments = Department.query.all()
+    return render_template(
+        "employee.html", employees=Employee.query.all(), departments=departments
+    )
 
 
 @app.route("/edit_employee/<int:id>", methods=["GET", "POST"])
@@ -122,7 +127,8 @@ def edit_employee(id):
         employee.department_id = request.form["department_id"]
         db.session.commit()
         return redirect(url_for("list_employees"))
-    return render_template("edit_employee.html", employee=employee)
+    departments = Department.query.all()
+    return render_template("employee.html", employee=employee, departments=departments)
 
 
 @app.route("/delete_employee/<int:id>", methods=["GET", "POST"])

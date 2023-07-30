@@ -24,10 +24,11 @@
       }
     </style>
   </head>
-  <body bgcolor="#cfd9df ">
+  <body bgcolor="#cfd9df">
     <h1>Employees List</h1>
     <table>
       <tr>
+        <th>#ID</th>
         <th>Name</th>
         <th>Email</th>
         <th>Date of Birth</th>
@@ -37,6 +38,7 @@
       </tr>
       {% for employee in employees %}
       <tr>
+        <td>{{ employee.id }}</td>
         <td>{{ employee.name }}</td>
         <td>{{ employee.email }}</td>
         <td>{{ employee.date_of_birth }}</td>
@@ -47,17 +49,37 @@
             method="post"
           >
             <label for="name">Name:</label>
-            <input type="text" id="name" name="name" value="{{ employee.name }}" required /><br />
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value="{{ employee.name }}"
+              required
+            /><br />
             <label for="email">Email:</label>
-            <input type="email" id="email" name="email" value="{{ employee.email }}" required /><br />
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value="{{ employee.email }}"
+              required
+            /><br />
             <label for="date_of_birth">Date of Birth:</label>
-            <input type="date" id="date_of_birth" name="date_of_birth" value="{{ employee.date_of_birth }}" required /><br />
-            <label for="department">Department:</label>
-            <select id="department" name="department_id" required>
-              {% for department in departments %}
-              <option value="{{ department.id }}" {% if department.id == employee.department_id %}selected{% endif %}>{{ department.name }}</option>
-              {% endfor %}
-            </select>
+            <input
+              type="date"
+              id="date_of_birth"
+              name="date_of_birth"
+              value="{{ employee.date_of_birth }}"
+              required
+            /><br />
+            <label for="department_id">Department ID:</label>
+            <input
+              type="text"
+              id="department_id"
+              name="department_id"
+              value="{{ employee.department_id }}"
+              required
+            /><br />
             <input type="submit" value="Save Changes" />
           </form>
         </td>
@@ -93,12 +115,13 @@
         required
       /><br />
 
-      <label for="department">Department:</label>
-      <select id="department" name="department_id" required>
-        {% for department in departments %}
-        <option value="{{ department.id }}">{{ department.name }}</option>
-        {% endfor %}
-      </select><br />
+      <label for="department_id">Department ID:</label>
+      <input
+        type="text"
+        id="department_id"
+        name="department_id"
+        required
+      /><br />
 
       <input type="submit" value="Add Employee" />
     </form>

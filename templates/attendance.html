@@ -82,10 +82,10 @@
     <h1>Add New Attendance Record</h1>
     <form action="{{ url_for('add_attendance') }}" method="post">
       <label for="employee_id">Employee:</label>
-      <select id="employee_id" name="employee_id" required>
+      <input type="text" id="employee_id" name="employee_id" required>
         {% for employee in employees %}
         <option value="{{ employee.id }}">{{ employee.name }}</option>
-        {% endfor %}</select
+        {% endfor %}</
       ><br />
 
       <label for="date">Date:</label>
