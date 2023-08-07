@@ -29,6 +29,8 @@
 
     <h2>Add New Department</h2>
     <form action="{{ url_for('add_department') }}" method="post">
+      <label for="id">ID:</label>
+      <input type="text" id="id" name="id" required /><br />
       <label for="name">Name:</label>
       <input type="text" id="name" name="name" required /><br />
       <input type="submit" value="Add Department" />

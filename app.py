@@ -11,19 +11,21 @@ db = SQLAlchemy(app)
 
 
 class Department(db.Model):
-    id = db.Column(db.Integer(), primary_key=True)
+    id = db.Column(db.String(20), primary_key=True)
     name = db.Column(db.String(100), nullable=False)
 
     def __repr__(self):
-        return f"Department({self.name})"
+        return f"Department({self.id},{self.name})"
 
 
 class Employee(db.Model):
-    id = db.Column(db.Integer(), primary_key=True)
+    id = db.Column(
+        db.String(50), primary_key=True
+    )  # Modified to allow manual insertion
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), nullable=False, unique=True)
     date_of_birth = db.Column(db.Date(), nullable=False)
-    department_id = db.Column(db.Integer(), db.ForeignKey(Department.id))
+    department_id = db.Column(db.String(20), db.ForeignKey(Department.id))
     department = db.relationship(
         "Department", backref=db.backref("employees", lazy="select")
     )
@@ -34,7 +36,7 @@ class Employee(db.Model):
 
 class Attendance(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
-    employee_id = db.Column(db.Integer(), db.ForeignKey(Employee.id))
+    employee_id = db.Column(db.String(20), db.ForeignKey(Employee.id))
     employee = db.relationship(
         "Employee", backref=db.backref("attendance_records", lazy="select")
     )
@@ -59,15 +61,16 @@ def show_departments():
 @app.route("/add_department", methods=["GET", "POST"])
 def add_department():
     if request.method == "POST":
+        identity = request.form["id"]
         name = request.form["name"]
-        new_department = Department(name=name)
+        new_department = Department(name=name, id=identity)
         db.session.add(new_department)
         db.session.commit()
         return redirect(url_for("show_departments"))
     return render_template("department.html")
 
 
-@app.route("/edit_department/<int:id>", methods=["GET", "POST"])
+@app.route("/edit_department/<string:id>", methods=["GET", "POST"])
 def edit_department(id):
     department = Department.query.get_or_404(id)
     if request.method == "POST":
@@ -77,7 +80,7 @@ def edit_department(id):
     return render_template("department.html", department=department)
 
 
-@app.route("/delete_department/<int:id>", methods=["GET", "POST"])
+@app.route("/delete_department/<string:id>", methods=["GET", "POST"])
 def delete_department(id):
     department = Department.query.get_or_404(id)
     if request.method == "POST":
@@ -89,18 +92,26 @@ def delete_department(id):
 
 @app.route("/employees")
 def list_employees():
-    employees = Employee.query.all()
+    search_query = request.args.get("q", "")
+    if search_query:
+        employees = Employee.query.filter(Employee.name.contains(search_query)).all()
+    else:
+        employees = Employee.query.all()
     return render_template("employee.html", employees=employees)
 
 
 @app.route("/add_employee", methods=["GET", "POST"])
 def add_employee():
     if request.method == "POST":
+        employee_id = request.form[
+            "employee_id"
+        ]  # Get the employee_id from the form input
         name = request.form["name"]
         email = request.form["email"]
         date_of_birth = request.form["date_of_birth"]
         department_id = request.form["department_id"]
         new_employee = Employee(
+            id=employee_id,  # Use the provided employee_id
             name=name,
             email=email,
             date_of_birth=date_of_birth,
@@ -117,7 +128,7 @@ def add_employee():
     )
 
 
-@app.route("/edit_employee/<int:id>", methods=["GET", "POST"])
+@app.route("/edit_employee/<string:id>", methods=["GET", "POST"])
 def edit_employee(id):
     employee = Employee.query.get_or_404(id)
     if request.method == "POST":
@@ -131,7 +142,7 @@ def edit_employee(id):
     return render_template("employee.html", employee=employee, departments=departments)
 
 
-@app.route("/delete_employee/<int:id>", methods=["GET", "POST"])
+@app.route("/delete_employee/<string:id>", methods=["GET", "POST"])
 def delete_employee(id):
     employee = Employee.query.get_or_404(id)
     if request.method == "POST":
@@ -143,7 +154,13 @@ def delete_employee(id):
 
 @app.route("/attendance")
 def list_attendance():
-    attendance = Attendance.query.all()
+    search_query = request.args.get("q", "")
+    if search_query:
+        attendance = Attendance.query.filter(
+            Attendance.employee_id.contains(search_query)
+        ).all()
+    else:
+        attendance = Attendance.query.all()
     return render_template("attendance.html", attendance=attendance)
 
 

@@ -26,6 +26,16 @@
   </head>
   <body bgcolor="#cfd9df">
     <h1>Employees List</h1>
+    <form action="{{ url_for('list_employees') }}" method="get">
+      <label for="search_query">Search Employee</label>
+      <input
+        type="text"
+        id="search_query"
+        name="q"
+        value="{{ search_query }}"
+      />
+      <button type="submit">Search</button>
+    </form>
     <table>
       <tr>
         <th>#ID</th>
@@ -72,12 +82,12 @@
               value="{{ employee.date_of_birth }}"
               required
             /><br />
-            <label for="department_id">Department ID:</label>
+            <label for="employee_id">Employee ID:</label>
             <input
               type="text"
-              id="department_id"
-              name="department_id"
-              value="{{ employee.department_id }}"
+              id="employee_id"
+              name="employee_id"
+              value="{{ employee.id }}"
               required
             /><br />
             <input type="submit" value="Save Changes" />
@@ -115,13 +125,11 @@
         required
       /><br />
 
-      <label for="department_id">Department ID:</label>
-      <input
-        type="text"
-        id="department_id"
-        name="department_id"
-        required
-      /><br />
+      <label for="employee_id">Employee ID:</label>
+      <input type="text" id="employee_id" name="employee_id" required />
+      <label for="dept_id">Department ID:</label>
+      <input type="text" id="department_id" name="department_id" required />
+      <br />
 
       <input type="submit" value="Add Employee" />
     </form>
