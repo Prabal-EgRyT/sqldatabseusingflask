@@ -2,6 +2,23 @@
 <html>
   <head>
     <title>Attendance Records</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&family=Roboto&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='emp.css') }}"
+    />
     <style>
       table {
         border-collapse: collapse;
@@ -23,13 +40,15 @@
         margin-right: 5px;
       }
     </style>
+    
   </head>
-  <body bgcolor="#a0d2eb">
-    <h1>Attendance Records</h1>
+  <body class="bg-body-tertiary">
+    <nav class="navbar bg-dark"> <h2>Attendance Records</h2></nav>
+   <br>
     <form action="{{url_for('list_attendance')}}" method="get">
       <label for="search_query">Search Attendance</label>
       <input type="text" id="search_query" name="q" value="{{search_query}}">
-      <button type="submit">Searchs</button>
+      <button type="submit">Search</button>
     </form>
     <table>
       <tr>
@@ -51,6 +70,7 @@
             action="{{ url_for('edit_attendance', id=attendance.id) }}"
             method="post"
           >
+          <div class="mb-3">
             <label for="date">Date:</label>
             <input
               type="date"
@@ -80,28 +100,26 @@
               value="Delete"
               onclick="return confirm('Are you sure you want to delete this attendance record?')"
             />
+          </div>
           </form>
         </td>
       </tr>
       {% endfor %}
     </table>
-
-    <h1>Add New Attendance Record</h1>
+    <nav class="navbar bg-dark"> <h2>Add New Attendance Record</h2></nav>
+   
     <form action="{{ url_for('add_attendance') }}" method="post">
-      <label for="employee_id">Employee:</label>
-      <input type="text" id="employee_id" name="employee_id" required>
-        {% for employee in employees %}
-        <option value="{{ employee.id }}">{{ employee.name }}</option>
-        {% endfor %}</
-      ><br />
-
-      <label for="date">Date:</label>
-      <input type="date" id="date" name="date" required /><br />
-
-      <label for="status">Status:</label>
-      <input type="text" id="status" name="status" required /><br />
-
-      <input type="submit" value="Add Attendance Record" />
+      <div class="add_emp">
+        <label for="employee_id">Employee: <br> <input type="text" id="employee_id" name="employee_id" required>
+          {% for employee in employees %}
+          <option value="{{ employee.id }}">{{ employee.name }}</option>
+          {% endfor %}</label>
+        <label for="date">Date: <br> <input type="date" id="date" name="date" required /></label>
+        <label for="status">Status: <br> <input type="text" id="status" name="status" required /></label>
+        <br>
+        <input type="submit" value="Add Attendance Record" />
+      </div>
+   
     </form>
   </body>
 </html>

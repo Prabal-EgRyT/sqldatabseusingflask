@@ -84,6 +84,16 @@ def edit_department(id):
 def delete_department(id):
     department = Department.query.get_or_404(id)
     if request.method == "POST":
+        # Delete all employees in this department
+        employees_to_delete = Employee.query.filter_by(department_id=id).all()
+        for employee in employees_to_delete:
+            # Delete attendance records for each employee
+            attendance_records_to_delete = Attendance.query.filter_by(
+                employee_id=employee.id
+            ).all()
+            for attendance_record in attendance_records_to_delete:
+                db.session.delete(attendance_record)
+            db.session.delete(employee)
         db.session.delete(department)
         db.session.commit()
         return redirect(url_for("show_departments"))
@@ -146,6 +156,9 @@ def edit_employee(id):
 def delete_employee(id):
     employee = Employee.query.get_or_404(id)
     if request.method == "POST":
+        attendance_records_to_delete = Attendance.query.filter_by(employee_id=id).all()
+        for attendance_record in attendance_records_to_delete:
+            db.session.delete(attendance_record)
         db.session.delete(employee)
         db.session.commit()
         return redirect(url_for("list_employees"))

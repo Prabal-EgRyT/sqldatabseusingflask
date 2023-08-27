@@ -1,0 +1,15 @@
+* {
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  list-style: none;
+  font-family: "Poppins", sans-serif;
+  font-weight: bolder;
+}
+h2 {
+  color: white;
+}
+div.container {
+  margin: 0;
+  padding-left: 20px;
+}

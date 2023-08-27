@@ -1,0 +1,17 @@
+* {
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  list-style: none;
+  font-family: "Poppins", sans-serif;
+  font-weight: bolder;
+}
+h2 {
+  color: white;
+}
+div.add_emp {
+  display: flex;
+  flex-direction: column;
+  width: 20rem;
+  margin-left: 20px;
+}
